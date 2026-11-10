@@ -9,7 +9,7 @@ static int score = 0;
 
 void setup() 
 {
-  Serial.begin(115200);
+  Serial.begin(90600);
   hitDetector_init();
 }
 
