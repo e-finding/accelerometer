@@ -13,7 +13,7 @@
 #define HIT_THRESHOLD_G             0.3 // threshold for what delta is a 'hit'
 #define QUIET_THRESHOLD             0.05 // threshold for delta is considered within baseline
 #define QUIET_SAMPLES               100 // how many samples it stays disarmed
-#define COOLDOWN_MS                 150 // time in ms that has to pass between detected hits
+#define COOLDOWN_MS                 100 // time in ms that has to pass between detected hits
 
 // initialize local variables
 static double baseline = 1.0;

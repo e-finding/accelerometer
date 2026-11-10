@@ -8,12 +8,12 @@
 #define Z_CHANNEL           2
 
 // voltage  
-#define ZERO_G_VOLTAGE_X    1.451
-#define ZERO_G_VOLTAGE_Y    1.451
-#define ZERO_G_VOLTAGE_Z    1.451
+#define ZERO_G_VOLTAGE_X    1.65
+#define ZERO_G_VOLTAGE_Y    1.65
+#define ZERO_G_VOLTAGE_Z    1.65
 
 // sensitivity 
-#define SENSITIVITY_PER_G   0.39 
+#define SENSITIVITY_PER_G   0.35 
 
 // helper function to convert millivolts to G
 static double mvToZeroGVolts(int millivolts, double zeroGVolts)
