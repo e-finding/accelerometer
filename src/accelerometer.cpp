@@ -2,53 +2,54 @@
 #include "hal/adc.h"
 #include <Arduino.h>
 
-// magic numbers
+// esp32 ADC channels 
 #define X_CHANNEL           0
 #define Y_CHANNEL           1
 #define Z_CHANNEL           2
-#define MAX_COUNT           4095.0
-#define VREF                3.3 // Volts
 
-// span is 1400 - 2200 from -1g to 1g, so 400/g
-// sensitivity = 400 / 4095 * 3.3 = 0.322 V
-// zero g = 1800 / 4095 * 3.3 = 1.451 V
+// voltage  
 #define ZERO_G_VOLTAGE_X    1.451
 #define ZERO_G_VOLTAGE_Y    1.451
 #define ZERO_G_VOLTAGE_Z    1.451
+
+// sensitivity 
 #define SENSITIVITY_PER_G   0.39 
 
-// helper function
-static double countsToG(int counts, double zeroGVolts)
+// helper function to convert millivolts to G
+static double mvToZeroGVolts(int millivolts, double zeroGVolts)
 {
-    double voltage = (counts / MAX_COUNT) * VREF;
+    double voltage = millivolts / 1000.0;
     return (voltage - zeroGVolts) / SENSITIVITY_PER_G;
 }
 
-
+// initialze ADC
 void accelerometer_init(void)
 {
-    adc_init(); // set up ADC pins
+    adc_init();
 }
 
+// gets a sample from the accelerometer via ADC pins
+// converts millivolts to voltage clalibrated to be zero g at 0
 bool accelerometer_getSample(accelerometer_sample_t *sample)
 {
+    // check a sample is returned
     if (sample == NULL) return false;
 
-    // get sample accelerations
+    // get sample accelerations (in millivolts)
     int x = adc_readChannel(X_CHANNEL);
     int y = adc_readChannel(Y_CHANNEL);
     int z = adc_readChannel(Z_CHANNEL);
 
-    // check adc read correctly
+    // check ADC read correctly
     if ((x == -1)|| (y == -1) || (z == -1)) { 
         Serial.println("Accelerometer - ADC failed to read"); 
         return false;
     }
 
-    // convert digital counts to voltage
-    sample->x_g = countsToG(x, ZERO_G_VOLTAGE_X);
-    sample->y_g = countsToG(y, ZERO_G_VOLTAGE_Y);
-    sample->z_g = countsToG(z, ZERO_G_VOLTAGE_Z);
+    // convert millivolts to corrected zero g voltage
+    sample->x_g = mvToZeroGVolts(x, ZERO_G_VOLTAGE_X);
+    sample->y_g = mvToZeroGVolts(y, ZERO_G_VOLTAGE_Y);
+    sample->z_g = mvToZeroGVolts(z, ZERO_G_VOLTAGE_Z);
 
     return true;
 }

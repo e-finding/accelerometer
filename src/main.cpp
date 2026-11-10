@@ -3,6 +3,7 @@
 #include "hal/adc.h"
 #include "hal/accelerometer.h"
 
+// game logic
 #define POINTS_PER_HIT 1
 static int score = 0;
 
